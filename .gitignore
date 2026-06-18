@@ -1,0 +1,9 @@
+# Runtime-generated files — never commit these
+organized_log.db
+reports/*.html
+__pycache__/
+*.pyc
+*.log
+
+# Virtual environment
+.venv/
