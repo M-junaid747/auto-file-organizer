@@ -1,0 +1,111 @@
+# =============================================================
+# Desktop Automation — Sorting Rules Configuration
+# Edit this file to change how files get organized.
+# =============================================================
+
+# Folder being monitored and organized.
+# Use double backslashes or forward slashes on Windows.
+source_folder: "Folder where organization is needed"
+
+# Root folder where organized subfolders will be created.
+# By default this is the same as source_folder, so subfolders
+# like Documents/, Images/, Videos/ appear inside Downloads.
+destination_root: "Folder where the results will be saved"
+
+# Files newer than this many seconds are skipped, so we never
+# grab a file that is still being downloaded/written.
+min_file_age_seconds: 60
+
+# ----------------------------------------------------------
+# Extension-based rules (first pass classification)
+# Map: destination subfolder -> list of extensions
+# ----------------------------------------------------------
+extension_rules:
+  Documents:
+    - .pdf
+    - .doc
+    - .docx
+    - .txt
+    - .rtf
+    - .odt
+  Spreadsheets:
+    - .xls
+    - .xlsx
+    - .csv
+  Presentations:
+    - .ppt
+    - .pptx
+  Images:
+    - .jpg
+    - .jpeg
+    - .png
+    - .gif
+    - .bmp
+    - .webp
+    - .svg
+  Videos:
+    - .mp4
+    - .mov
+    - .avi
+    - .mkv
+    - .webm
+  Audio:
+    - .mp3
+    - .wav
+    - .flac
+    - .m4a
+  Archives:
+    - .zip
+    - .rar
+    - .7z
+    - .tar
+    - .gz
+  Installers:
+    - .exe
+    - .msi
+
+# ----------------------------------------------------------
+# Content-aware rules (second pass — overrides extension rule)
+# Only applied to .pdf, .docx, .txt files where text extraction
+# is possible. The first matching keyword wins, checked top to
+# bottom, so put more specific rules first.
+# Destination is relative to the extension-based folder, e.g.
+# "Documents/Invoices" creates a subfolder inside Documents.
+# ----------------------------------------------------------
+content_rules:
+  - keywords: ["invoice", "receipt", "payment due", "bill to"]
+    destination: "Documents/Invoices"
+  - keywords: ["resume", "curriculum vitae", "cv"]
+    destination: "Documents/Resumes"
+  - keywords: ["contract", "agreement", "terms and conditions", "signed by"]
+    destination: "Documents/Contracts"
+  - keywords: ["transcript", "grade report", "certificate"]
+    destination: "Documents/Academic"
+
+# ----------------------------------------------------------
+# Files older than this many days with no content match
+# get archived instead of left in their type folder.
+# Set to 0 to disable age-based archiving.
+# ----------------------------------------------------------
+archive_after_days: 90
+archive_folder_name: "Archive"
+
+# ----------------------------------------------------------
+# Anything that matches no rule above goes here.
+# ----------------------------------------------------------
+fallback_folder: "Misc"
+
+# ----------------------------------------------------------
+# Duplicate handling
+# ----------------------------------------------------------
+duplicate_folder: "Duplicates"
+
+# ----------------------------------------------------------
+# File name / path patterns to always ignore (never touched)
+# ----------------------------------------------------------
+ignore_patterns:
+  - "*.tmp"
+  - "*.crdownload"
+  - "*.part"
+  - "desktop.ini"
+  - ".gitkeep"
